@@ -1,37 +1,74 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import * as service from './services/auth';
+import * as testService from './services/test';
 
 class App extends Component {
   state = {
-    username: null
+    user: null,
+    loginInfo: {
+      username: '',
+      password: ''
+    },
+    signupInfo: {
+      username: '',
+      password: '',
+      email: '',
+      sex: true,
+    }
   };
 
   componentDidMount() {
-    fetch('/api/getUsername')
-    .then((res) => res.json())
-    .then((user) => this.setState({username: user.username}));
+    testService.getData().then((user)=>this.setState({user: user.username}));
   }
+
+  handleLogin = async() => {
+    const auth = await service.login(this.state.loginInfo);
+    if (auth) {
+      console.log('login!' + auth.msg);
+    } else {
+      alert('잘못된 계정');
+    }
+  }
+
+  handlerChange = (e) => {
+    const {name, value} = e.target;
+    this.setState({
+      [name]: value
+    })
+  }
+
   render() {
-    const {username} = this.state;
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
         <div>
-          {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
+          <input
+            type="text"
+            placeholder="아이디"
+            value={this.state.loginInfo.username}
+            onChange={this.handlerChange}
+            name="username"
+          >
+          </input>
+        </div>
+        <div>
+          <input
+            type="password"
+            placeholder="비밀번호"
+            value={this.state.loginInfo.password}
+            onChange={this.handlerChange}
+            name="password"
+          >
+          </input>
+        </div>
+        <div>
+          <button
+            type="button"
+            onClick={this.handleLogin}
+          >Login</button>
+        </div>
+        <div>
+          {this.state.user? <h1>{`Hello ${this.state.user}`}</h1> : <h1>Loading.. please wait!</h1>}
         </div>
       </div>
     );
