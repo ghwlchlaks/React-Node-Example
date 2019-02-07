@@ -20,5 +20,34 @@ export const signup = (signupInfo) => {
     password: signupInfo.password,
     email : signupInfo.email,
     sex : signupInfo.sex
+  }).then((result) => {
+    if (result.status === 200 && result.data.status) return result.data
+    else return null;
+  })
+  .catch((err) => {
+    return null;
+  })
+}
+
+export const update = (updateInfo) => {
+  return axios.put('/auth/update', {
+    password: updateInfo.password
+  }).then((result) => {
+    if (result.status === 200 && result.data.status) return result.data
+    else return null;
+  })
+  .catch((err) => {
+    return null;
+  })
+}
+
+export const logout = () => {
+  return axios.get('/auth/logout')
+  .then((result) => {
+    if (result.status === 200 && result.data.status) return result.data
+    else return null;
+  })
+  .catch((err) => {
+    return null;
   })
 }
