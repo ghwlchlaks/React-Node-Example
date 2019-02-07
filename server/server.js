@@ -8,10 +8,12 @@ const passport = require('passport');
 
 // routes files
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
 
 // config files
 const redis = require('./config/redis');
 const mongoose = require('./config/mongoose');
+const passportConfig = require('./config/passport');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error'));
@@ -34,9 +36,13 @@ app.use(session({
       client: redis
     })
   }))
+app.use(passport.initialize());
+app.use(passport.session());
+passportConfig();
 
 // if you need api routes add them here
-app.use("/",indexRouter);
+app.use('/',indexRouter);
+app.use('/auth', authRouter);
 
 app.listen(PORT, () => {
 console.log(`Check out the app at http://localhost:${PORT}`);
@@ -55,7 +61,7 @@ app.use(function(req, res, next) {
     res.locals.error = req.app.get('env') === 'development' ? err : {};
   
     // render the error page
-    res.status(err.status || 500).send('error');
+    res.status(err.status || 500).send(err);
   });
   
 module.exports = app;
