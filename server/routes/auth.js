@@ -17,17 +17,17 @@ router.get('/',isAuthentication, (req, res) => {
 
 router.put('/login', passport.authenticate('login'),
   (req, res) => {
-  res.status(200).send(req.user.username);
+  res.status(200).send({status: true, msg: req.user.username});
 })
 
 router.post('/signup', passport.authenticate('signup'),
  (req, res) => {
-  res.status(200).send(req.user.username);
+  res.status(200).send({status: true, msg: req.user.username});
 })
 
 router.get('/logout', (req, res) => {
   req.logout();
-  res.status(200).send('logout success');
+  res.status(200).send({status: true, msg:'logout success'});
 })
 
 router.put('/update', isAuthentication, async (req, res) => {
@@ -44,7 +44,7 @@ router.put('/update', isAuthentication, async (req, res) => {
     res.status(200).send({status: true, msg: '갱신 성공'});
   } catch (err) {
     console.error(err);
-    res.status(500).send('에러 발생');
+    res.status(500).send({status : false, msg: '에러 발생'});
   }
 })
 

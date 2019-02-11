@@ -25,7 +25,7 @@ class App extends Component {
   handleLogin = async() => {
     const auth = await service.login(this.state.loginInfo);
     if (auth) {
-      console.log('login!' + auth.msg);
+      console.log('login! ' + auth.msg);
     } else {
       alert('잘못된 계정');
     }
@@ -34,7 +34,10 @@ class App extends Component {
   handlerChange = (e) => {
     const {name, value} = e.target;
     this.setState({
-      [name]: value
+      loginInfo: {
+        ...this.state.loginInfo,
+        [name]: value,
+      }
     })
   }
 
@@ -45,9 +48,8 @@ class App extends Component {
           <input
             type="text"
             placeholder="아이디"
-            value={this.state.loginInfo.username}
             onChange={this.handlerChange}
-            name="username"
+            name= "username"
           >
           </input>
         </div>
@@ -55,7 +57,6 @@ class App extends Component {
           <input
             type="password"
             placeholder="비밀번호"
-            value={this.state.loginInfo.password}
             onChange={this.handlerChange}
             name="password"
           >

@@ -6,10 +6,12 @@ export const login = (loginInfo) => {
     password: loginInfo.password
   })
   .then((result) => {
+    console.log(result);
     if (result.status === 200 && result.data.status) return result.data
     else return null;
   })
   .catch((err) => {
+    console.log(err);
     return null;
   })
 }
